@@ -16,4 +16,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product>findAllByWithDiscount();
     @Query(value = "select * from products where recommended=true",nativeQuery = true)
     List<Product>findAllByRecommended();
+
+
 }

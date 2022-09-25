@@ -27,4 +27,8 @@ public class Product {
 
     @ManyToOne
     private Currency priceInCurrency;
+
+    @ManyToOne
+    @JoinColumn(name = "basket_id",nullable = false)
+    private Basket basket;
 }
