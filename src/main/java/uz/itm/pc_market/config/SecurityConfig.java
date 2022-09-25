@@ -1,5 +1,6 @@
 package uz.itm.pc_market.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -7,6 +8,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -16,11 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("superAdmin").password("superAdmin").roles("SUPER_ADMIN"). authorities("READ_ALL_PRODUCTS","ADD_PRODUCT","EDIT_PRODUCT","DELETE_PRODUCT","READ_ONE_PRODUCT")
+                .withUser("superAdmin").password(passwordEncoder().encode( "superAdmin")).roles("SUPER_ADMIN"). authorities("READ_ALL_PRODUCTS","ADD_PRODUCT","EDIT_PRODUCT","DELETE_PRODUCT","READ_ONE_PRODUCT")
                 .and()
-                .withUser("moderator").password("moderator").roles("MODERATOR").authorities("READ_ALL_PRODUCTS","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
+                .withUser("moderator").password(passwordEncoder().encode( "moderator")).roles("MODERATOR").authorities("READ_ALL_PRODUCTS","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
                 .and()
-                .withUser("operator").password("operator").roles("OPERATOR").authorities("READ_ALL_PRODUCTS","READ_ONE_PRODUCT");
+                .withUser("operator").password(passwordEncoder().encode( "operator")).roles("OPERATOR").authorities("READ_ALL_PRODUCTS","READ_ONE_PRODUCT");
 
     }
 
@@ -35,5 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .httpBasic();
+    }
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }
